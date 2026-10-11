@@ -132,6 +132,19 @@ class SavingsGoalServiceTest {
     }
 
     @Test
+    void createRejectsStartDateAfterFutureTargetDate() {
+        // Unlike the E2E script's case, the target date is still in the future (clock is 2026-10-11),
+        // so only the start-before-target rule can reject this.
+        CreateGoalRequest request = new CreateGoalRequest("Invalid Dates Goal", new BigDecimal("5000.00"),
+                LocalDate.of(2027, 6, 1), LocalDate.of(2028, 1, 1));
+
+        assertThatThrownBy(() -> service.create(user, request))
+                .isInstanceOf(BadRequestException.class)
+                .hasMessage("startDate must be before targetDate");
+        verify(goalRepository, never()).save(any());
+    }
+
+    @Test
     void updateTargetAmountRoundsPercentageToTwoDecimals() {
         SavingsGoal goal = TestData.goal(2L, "10000.00", "2024-01-01", user);
         when(goalRepository.findByIdAndUserId(2L, 1L)).thenReturn(Optional.of(goal));
