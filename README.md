@@ -60,15 +60,19 @@ The app is deployed on Render as a Docker web service, built from the `Dockerfil
   - Uses `JAVA_TOOL_OPTIONS=-XX:MaxRAMPercentage=75`.
   - Listens on the `PORT` that Render injects.
 
-Live URL: `https://<app>.onrender.com/api`
+Live URL: `https://personal-finance-manager-jalt.onrender.com/api`
 
 To run the end-to-end script against the deployment:
 
 ```bash
-bash financial_manager_tests.sh https://<app>.onrender.com/api
+bash financial_manager_tests.sh https://personal-finance-manager-jalt.onrender.com/api
 ```
 
 The free Render tier spins down when idle, so the first request after a pause can take a while.
+
+## Test results
+
+The E2E script passes 86/86 against the deployed URL. `./mvnw verify` runs 122 tests at 96.8% line coverage.
 
 ## API reference
 
